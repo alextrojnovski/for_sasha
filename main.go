@@ -220,12 +220,18 @@ func main() {
 	r.HandleFunc("/result", resultHandler).Methods("GET")
 	r.HandleFunc("/logout", logoutHandler).Methods("GET")
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-	log.Printf("🚀 Сервер запущен на порту %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+// Railway передаёт порт через переменную PORT
+port := os.Getenv("PORT")
+if port == "" {
+	port = "8080"
+}
+log.Printf("🚀 Сервер запущен на порту %s", port)
+
+// Слушаем все интерфейсы (0.0.0.0)
+err := http.ListenAndServe("0.0.0.0:"+port, r)
+if err != nil {
+	log.Fatal(err)
+}
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
