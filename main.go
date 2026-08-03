@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"  // ← добавить
+	"os"  
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -58,7 +59,7 @@ var musicQuestions = []MusicQuestion{
 	{
 		ID:       3,
 		Title:    "🎵 Угадай песню #4",
-		Artist:   "Подсказка:Я русский",
+		Artist:   "Подсказка:Я русский",	
 		AudioURL: "/static/music/track4.mp3",
 		Options:  []string{"DEAD BLONDE - СНЕГ РАСТАЯЛ НА ПЛЕЧАХ", "МС Вспышкин и Никифоровна - Колбасный цех 3 (шишки)", "Песня о любви — Уральские Пельмени", "Нейромонах Феофан - Притоптать", "GSPD - Никому не говори", "Егор Крид - будильник"},
 		Correct:  4,
@@ -184,9 +185,10 @@ var questions = []Question{
 func main() {
 	gob.Register(map[int]bool{})
 	gob.Register(User{})
-	gob.Register(MusicSession{}) // ← добавить эту строку
-	gob.Register(map[string]int{}) // ← добавляем регистрацию map[string]int
-	gob.Register(CouponData{})  // ← добавить
+	gob.Register(MusicSession{})
+	gob.Register(map[string]int{})
+	gob.Register(CouponData{})
+	
 	r := mux.NewRouter()
 
 	store.Options = &sessions.Options{
@@ -195,23 +197,20 @@ func main() {
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	}
-// В main() добавь:
-r.HandleFunc("/coupon", couponHandler).Methods("GET")
-r.HandleFunc("/coupon-form", couponFormHandler).Methods("GET")
-r.HandleFunc("/coupon-submit", couponSubmitHandler).Methods("POST")
-r.HandleFunc("/coupon-receipt", couponReceiptHandler).Methods("GET")
+
 	r.PathPrefix("/static/").Handler(http.FileServer(http.FS(webFiles)))
 
+	r.HandleFunc("/coupon", couponHandler).Methods("GET")
+	r.HandleFunc("/coupon-form", couponFormHandler).Methods("GET")
+	r.HandleFunc("/coupon-submit", couponSubmitHandler).Methods("POST")
+	r.HandleFunc("/coupon-receipt", couponReceiptHandler).Methods("GET")
 	r.HandleFunc("/letter", letterHandler).Methods("GET")
 	r.HandleFunc("/open-letter", openLetterHandler).Methods("GET")
-	// Музыкальный квиз
 	r.HandleFunc("/music", musicIndexHandler).Methods("GET")
 	r.HandleFunc("/music-question/{id}", musicQuestionHandler).Methods("GET")
 	r.HandleFunc("/music-answer", musicAnswerHandler).Methods("POST")
 	r.HandleFunc("/music-result", musicResultHandler).Methods("GET")
 	r.HandleFunc("/reset-music", resetMusicHandler).Methods("GET")
-
-	// Основной квиз и дашборд
 	r.HandleFunc("/", indexHandler).Methods("GET")
 	r.HandleFunc("/register", registerHandler).Methods("POST")
 	r.HandleFunc("/dashboard", dashboardHandler).Methods("GET")
@@ -221,8 +220,12 @@ r.HandleFunc("/coupon-receipt", couponReceiptHandler).Methods("GET")
 	r.HandleFunc("/result", resultHandler).Methods("GET")
 	r.HandleFunc("/logout", logoutHandler).Methods("GET")
 
-	log.Println("🚀 Сервер запущен на http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Printf("🚀 Сервер запущен на порту %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
