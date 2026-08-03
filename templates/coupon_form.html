@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎫 Получить купон</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .coupon-form-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .coupon-form-container .subtitle {
+            text-align: center;
+            color: #8a7a6a;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .coupon-form-container .form-group select,
+        .coupon-form-container .form-group input {
+            padding: 12px 16px;
+            border: 2px solid rgba(200, 180, 170, 0.3);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background: rgba(255, 248, 240, 0.6);
+            color: #3d2a1e;
+            width: 100%;
+        }
+
+        .coupon-form-container .form-group select:focus,
+        .coupon-form-container .form-group input:focus {
+            outline: none;
+            border-color: #d4887a;
+            box-shadow: 0 0 0 4px rgba(212, 136, 122, 0.1);
+            background: rgba(255, 248, 240, 0.8);
+        }
+
+        .coupon-form-container .form-group select option {
+            background: #fefaf5;
+            color: #3d2a1e;
+        }
+
+        .coupon-form-container .btn-primary {
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #b0a090;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #d4887a;
+        }
+
+        .date-input-wrapper {
+            position: relative;
+        }
+
+        .date-input-wrapper input[type="date"] {
+            padding: 12px 16px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .date-input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .place-hint {
+            font-size: 13px;
+            color: #b0a090;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .place-hint .highlight {
+            color: #d4887a;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="light-spots">
+        <div class="light-spot"></div>
+        <div class="light-spot"></div>
+        <div class="light-spot"></div>
+    </div>
+
+    <div class="container coupon-form-container">
+        <div class="card register-card">
+            <div class="header-icon">🎫</div>
+            <h1>Получить купон</h1>
+            <p class="subtitle">Заполни форму и получи свой эксклюзивный купон! V●ᴥ●V</p>
+            
+            <form action="/coupon-submit" method="POST" class="register-form">
+                <div class="form-group">
+                    <label for="date">📅 Выбери день</label>
+                    <div class="date-input-wrapper">
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="time">🕐 Выбери время</label>
+                    <select id="time" name="time" required>
+                        <option value="">Выбери время</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="place">📍 Куда пойдём?</label>
+                    <input type="text" id="place" name="place" placeholder="Напиши место..." required>
+                    <div class="place-hint">
+                        💡 Любое место, кроме <span class="highlight">Макдональдса</span> (^ω^)
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    ✨ Получить купон
+                </button>
+            </form>
+            
+            <a href="/dashboard" class="back-link">← Вернуться на главную</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            dateInput.min = yyyy + '-' + mm + '-' + dd;
+            
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tdd = String(tomorrow.getDate()).padStart(2, '0');
+            const tmm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const tyyyy = tomorrow.getFullYear();
+            dateInput.value = tyyyy + '-' + tmm + '-' + tdd;
+        });
+
+        // Проверка на Макдональдс
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const place = document.getElementById('place').value.trim().toLowerCase();
+            if (place.includes('макдональдс') || place.includes('мак') || place.includes('mcdonald')) {
+                e.preventDefault();
+                alert('❌ Макдональдс — не вариант! Выбери что-то более романтичное 😉');
+                document.getElementById('place').value = '';
+                document.getElementById('place').focus();
+            }
+        });
+    </script>
+
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

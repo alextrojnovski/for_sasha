@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Для Саши</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+        }
+
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart-float {
+            position: absolute;
+            font-size: 18px;
+            animation: floatHeart 12s linear infinite;
+            opacity: 0.2;
+            color: #e8a0b0;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .letter-container {
+            max-width: 580px;
+            width: 100%;
+            background: rgba(255, 248, 240, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px 35px;
+            box-shadow: 0 30px 80px rgba(180, 150, 130, 0.2);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+            border: 2px solid rgba(212, 136, 122, 0.15);
+            outline: 3px solid rgba(212, 136, 122, 0.03);
+            outline-offset: 3px;
+            background-image: 
+                radial-gradient(circle at 15px 15px, rgba(212, 136, 122, 0.04) 2px, transparent 2px),
+                radial-gradient(circle at 45px 45px, rgba(212, 136, 122, 0.03) 3px, transparent 3px);
+            background-size: 60px 60px;
+        }
+
+        .letter-container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1.5px dashed rgba(212, 136, 122, 0.08);
+            border-radius: 18px;
+            pointer-events: none;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .letter-header {
+            text-align: center;
+            border-bottom: 2px dashed rgba(212, 136, 122, 0.15);
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+        }
+
+        .letter-header .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 4px;
+            animation: pulse-heart 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-heart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .letter-header h1 {
+            color: #7a5d4a;
+            font-size: 24px;
+            margin: 4px 0 0 0;
+            font-family: 'Georgia', serif;
+            font-weight: 400;
+        }
+
+        .letter-header .subtitle {
+            color: #b09880;
+            font-size: 13px;
+            font-style: italic;
+            margin: 4px 0 0 0;
+        }
+
+        .letter-content {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #5a4a3a;
+            font-family: 'Georgia', serif;
+            padding: 5px 0;
+        }
+
+        .letter-content .greeting {
+            font-size: 20px;
+            font-weight: 600;
+            color: #7a5d4a;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .letter-content p {
+            margin: 12px 0;
+            text-indent: 25px;
+        }
+
+        .letter-content .signature {
+            text-align: right;
+            font-size: 18px;
+            margin-top: 20px;
+            font-style: italic;
+            color: #7a5d4a;
+        }
+
+        .letter-content .signature .heart {
+            color: #e88090;
+        }
+
+        .letter-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 18px;
+            border-top: 2px dashed rgba(212, 136, 122, 0.15);
+        }
+
+        .letter-footer .btn-back {
+            display: inline-block;
+            padding: 12px 35px;
+            background: linear-gradient(135deg, #e8a090, #d4887a);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 4px 15px rgba(200, 130, 110, 0.2);
+        }
+
+        .letter-footer .btn-back:hover {
+            transform: scale(1.04);
+            box-shadow: 0 10px 30px rgba(200, 130, 110, 0.3);
+        }
+
+        .letter-footer .btn-back .emoji {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .letter-container {
+                padding: 25px 18px;
+            }
+            .letter-content {
+                font-size: 15px;
+            }
+            .letter-content .greeting {
+                font-size: 17px;
+            }
+            .letter-header h1 {
+                font-size: 20px;
+            }
+            .letter-header .icon {
+                font-size: 32px;
+            }
+            .letter-footer .btn-back {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="letter-container">
+    <!-- Аудио с автовоспроизведением и предзагрузкой -->
+    <audio id="bgMusic" autoplay loop preload="auto">
+        <source src="/static/music/summer_vibes.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио
+    </audio>
+
+    <div class="letter-header">
+        <span class="icon">💕</span>
+        <h1> Для АйПаДкИдА</h1>
+        <p class="subtitle">Поздравляю тебя!!!</p>
+    </div>
+
+    <div class="letter-content">
+        <div class="greeting">Дорогая Саша! </div>
+        
+        <p>
+            Сегодня особенный день — твой День Рождения! И я хочу, чтобы ты знала: 
+            ты самый неожиданный человек в моей жизни, который появился очень внезапно. ✨
+        </p>
+        
+        <p>
+            Рядом с тобой всегда ощущается чувство уюта, а твоя улыбка может скрасить
+            даже самый серый и мрачный день. 🌟
+        </p>
+        
+        <p>
+            Я очень рад, что в этот день ты окружена  своми друзьями и семьей, которые безмерно
+            любят тебя и готовы пойти на все ради тебя. Я очень благодарен тебе, что ты есть в моей 
+            жизни и, что ни один день не обходиться без твоего присутсвия в нем.(*・ω・)ﾉ
+        </p>
+        
+        <p>
+            Я желаю тебе: пусть все твои мечты сбываются, каждый день приносит 
+            радость и улыбки, много мани в кормани, меньше рыгать в подушку, гигансткую кучу здоровья,
+            и чего-то крутого, что я еще не придумал! 
+        </p>
+        
+        <p>
+            Будь счастлива каждый день, ведь ты — самая потрясающая девушка 
+            на этой планете. С Днём Рождения! 🎉
+        </p>
+        
+        <div class="signature">
+            Никогда не мойся я всегда рядом ❤️ <br>
+            <span class="heart">❤️</span> От Саши <span class="heart">(´･ᴗ･ ` )</span>
+        </div>
+    </div>
+
+    <div class="letter-footer">
+        <a href="/dashboard" class="btn-back">
+            <span class="emoji">🏠</span> Вернуться на главную
+        </a>
+    </div>
+</div>
+
+<script>
+    function createHearts() {
+        const container = document.getElementById('heartsBg');
+        const symbols = ['❤️', '💕', '💗', '💖', '💝', '💓'];
+        
+        for (let i = 0; i < 20; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-float';
+            heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 16 + 10) + 'px';
+            heart.style.animationDelay = (Math.random() * 12) + 's';
+            heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
+            container.appendChild(heart);
+        }
+    }
+    
+    createHearts();
+
+    // Предзагружаем аудио и запускаем мгновенно
+    document.addEventListener('DOMContentLoaded', function() {
+        const audio = document.getElementById('bgMusic');
+        audio.load();
+        
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(function(e) {
+                document.addEventListener('click', function playOnClick() {
+                    audio.play();
+                    document.removeEventListener('click', playOnClick);
+                }, { once: true });
+            });
+        }
+    });
+</script>
+
+<script src="/static/js/cursor.js"></script>
+</body>
+</html>

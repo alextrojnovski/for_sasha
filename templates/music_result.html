@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Результат</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+<div class="light-spots">
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+</div>
+    <div class="container">
+        <div class="card result-card music-result-card">
+            <div class="result-icon">
+                {{if eq .Correct .Total}}🎉
+                {{else if ge .Correct 4}}😍
+                {{else if ge .Correct 2}}😊
+                {{else}}😅{{end}}
+            </div>
+            <h1>Результат игры</h1>
+            <p class="subtitle">Угадай мелодию</p>
+            
+            <div class="score">
+                <span class="number">{{.Correct}}</span>
+                <span class="total">/ {{.Total}}</span>
+            </div>
+            
+            <div class="message">
+                {{if eq .Correct .Total}}
+                    🌟 Идеально! Ты знаешь все песни! Ты музыкальный гений!
+                {{else if ge .Correct 4}}
+                    👍 Отлично! {{.Correct}} из {{.Total}}! Ты отлично разбираешься в музыке!
+                {{else if ge .Correct 2}}
+                    😊 Неплохо! {{.Correct}} из {{.Total}}! Попробуй ещё раз!
+                {{else}}
+                    😅 {{.Correct}} из {{.Total}}... Попробуй ещё раз, у тебя получится!
+                {{end}}
+            </div>
+            
+            <div class="result-actions">
+                <a href="/reset-music" class="btn btn-primary">🔄 Попробовать снова</a>
+                <a href="/dashboard" class="btn btn-secondary">🏠 На главную</a>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

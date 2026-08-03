@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 День рождения Саши</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+<div class="light-spots">
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+</div>
+    <div class="container">
+        <div class="card register-card">
+            <div class="header-icon">🎉</div>
+            <h1>С днем рождения АйПаДкИд</h1>
+            <p class="subtitle">Только для именинницы!</p>
+            
+            {{if .Error}}
+            <div class="error-message">
+                {{.Error}}
+            </div>
+            {{end}}
+            
+            <form action="/register" method="POST" class="register-form">
+                <div class="form-group">
+                    <label for="name"> Как тебя зовут?</label>
+                    <input type="text" id="name" name="name" placeholder="Введите имя" value="{{.Name}}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthday"> Твоя дата рождения</label>
+                    <input type="date" id="birthday" name="birthday" value="{{.Birthday}}" required>
+                </div>
+                
+                <div class="form-group">    
+                    <label for="wish"> Загадай желание и Саша постарается его исполнить</label>
+                    <textarea id="wish" name="wish" rows="3" placeholder="Напиши своё желание..." required>{{.Wish}}</textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                     Далее
+                </button>
+            </form>
+            
+            <div class="hint">
+                <small>💡 Подсказка: этот тест только для Саши!</small>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

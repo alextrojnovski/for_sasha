@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Добро пожаловать, {{.User.Name}}!</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+    <div class="light-spots">
+        <div class="light-spot"></div>
+        <div class="light-spot"></div>
+        <div class="light-spot"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Шапка с именем и выходом -->
+        <header class="dashboard-header">
+            <!-- Кружевные уголки шапки -->
+            <span class="corner corner-tl">❀</span>
+            <span class="corner corner-tr">❀</span>
+            <span class="corner corner-bl">❀</span>
+            <span class="corner corner-br">❀</span>
+            <div class="header-content">
+                <h1>🎉 С Днём Рождения, {{.User.Name}}!</h1>
+                <a href="/logout" class="logout-btn">🚪 Выйти</a>
+            </div>
+            <p class="wish-text">Твоё желание: "{{.User.Wish}}"</p>
+        </header>
+
+        <!-- Кружевной разделитель -->
+        <div class="lace-divider">✿ ✿ ✿ ✿ ✿</div>
+
+        <!-- Галерея фотографий -->
+        <section class="gallery-section">
+            <h2>Самая поразительная </h2>
+            <div class="gallery-grid">
+                {{range .Photos}}
+                <div class="photo-frame">
+                    <div class="photo-card">
+                        <img src="{{.ImageURL}}" alt="{{.Caption}}" class="photo-image">
+                        <div class="photo-overlay">
+                            <p class="photo-caption">{{.Caption}}</p>
+                            <p class="photo-description">{{.Description}}</p>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </section>
+
+        <!-- Кружевной разделитель -->
+        <div class="lace-divider">✿ ✿ ✿ ✿ ✿</div>
+
+        <!-- Поздравительная рамка -->
+        <section class="congrats-section">
+            <div class="congrats-frame">
+                <!-- Кружевные уголки -->
+                <span class="corner corner-tl">❀</span>
+                <span class="corner corner-tr">❀</span>
+                <span class="corner corner-bl">❀</span>
+                <span class="corner corner-br">❀</span>
+                <div class="congrats-content">
+                    <span class="congrats-icon">💝</span>
+                    <h3> Мои поздравления!</h3>
+                    <p>
+                        {{.User.Name}}, желаю тебе океан счастья, 
+                        горы улыбок и море радости! 
+                        Пусть каждый день приносит вдохновение,
+                        а все мечты обязательно сбудутся! 
+                    </p>
+                    <div class="hearts">❤️ 💕 💗 💖 💝</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Кружевной разделитель -->
+        <div class="lace-divider">✿ ✿ ✿ ✿ ✿</div>
+
+                <!-- Кнопки приложений -->
+        <section class="apps-section">
+            <h2>🎮 Выбери развлечение</h2>
+            <div class="apps-grid">
+                <!-- Квиз -->
+                <a href="/reset-quiz" class="app-card quiz-card">
+                    <div class="app-icon">❓</div>
+                    <h3>{{if .IsQuizCompleted}}✅ Пройдено{{else}}Квиз{{end}}</h3>
+                    <p>
+                        {{if .IsQuizCompleted}}
+                            Правильных ответов: {{.CorrectAnswers}} из {{.TotalQuestions}}
+                            {{if eq .CorrectAnswers .TotalQuestions}}
+                                🌟 Идеально!
+                            {{else if ge .CorrectAnswers 2}}
+                                👍 Отлично!
+                            {{else}}
+                                😊 Хорошо!
+                            {{end}}
+                            <span style="display:block; font-size:12px; margin-top:5px; opacity:0.7;">
+                                Нажми, чтобы пройти заново
+                            </span>
+                        {{else}}
+                            Проверь, как хорошо ты знаешь себя
+                        {{end}}
+                    </p>
+                    <span class="app-tag">
+                        {{if .IsQuizCompleted}}
+                            🎯 {{.CorrectAnswers}}/{{.TotalQuestions}}
+                        {{else}}
+                            🧠 Тест
+                        {{end}}
+                    </span>
+                </a>
+
+                <!-- Музыкальный квиз -->
+                <a href="/reset-music" class="app-card music-card">
+                    <div class="app-icon">🎵</div>
+                    <h3>{{if .IsMusicCompleted}}✅ Пройдено{{else}}Угадай мелодию{{end}}</h3>
+                    <p>
+                        {{if .IsMusicCompleted}}
+                            Угадано: {{.MusicCorrect}} из {{.MusicTotal}}
+                            {{if eq .MusicCorrect .MusicTotal}}
+                                🌟 Идеально!
+                            {{else if ge .MusicCorrect 1}}
+                                👍 Неплохо!
+                            {{else}}
+                                😅 Попробуй ещё
+                            {{end}}
+                            <span style="display:block; font-size:12px; margin-top:5px; opacity:0.7;">
+                                Нажми, чтобы пройти заново
+                            </span>
+                        {{else}}
+                            Прослушай и угадай песню
+                        {{end}}
+                    </p>
+                    <span class="app-tag">
+                        {{if .IsMusicCompleted}}
+                            🎯 {{.MusicCorrect}}/{{.MusicTotal}}
+                        {{else}}
+                            🎧 Игра
+                        {{end}}
+                    </span>
+                </a>
+
+                <!-- Конверт с письмом -->
+                <a href="/letter" class="app-card letter-card">
+                    <div class="app-icon">💌</div>
+                    <h3>письмецо</h3>
+                    <p>Открой конверт с сюрпризом</p>
+                    <span class="app-tag">💕 Для АйПаДкИдА</span>
+                </a>
+                <!-- Купон -->
+<a href="/coupon" class="app-card coupon-card">
+    <div class="app-icon">🎫</div>
+    <h3>Получить купон</h3>
+    <p>Заполни форму и получи эксклюзивный купон</p>
+    <span class="app-tag">💝 Подарок</span>
+</a>
+            </div>
+        </section>
+
+        <!-- Кружевной разделитель -->
+        <div class="lace-divider">✿ ✿ ✿ ✿ ✿</div>
+    </div>
+
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

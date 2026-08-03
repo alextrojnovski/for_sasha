@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Угадай мелодию</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+<div class="light-spots">
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+</div>
+    <div class="container">
+        <div class="card music-start-card">
+            <div class="header-icon">🎵</div>
+            <h1>Угадай мелодию</h1>
+            <p class="subtitle">Прослушай фрагмент и угадай песню!</p>
+            
+            <div class="rules">
+                <div class="rule-item">🎧 Нажми на кнопку, чтобы прослушать</div>
+                <div class="rule-item">⏱️ У тебя есть 3 секунды на прослушивание</div>
+                <div class="rule-item">✅ Выбери правильный вариант из 6</div>
+                <div class="rule-item">🎯 В конце узнаешь результат</div>
+            </div>
+            
+            <a href="/music-question/0" class="btn btn-primary">
+                🚀 Начать игру
+            </a>
+            
+            <div class="hint">
+                <small>💡 Всего 6 вопросов</small>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

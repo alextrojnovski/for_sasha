@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Вопрос {{.Current}} из {{.Total}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+<div class="light-spots">
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+</div>
+    <div class="container">
+        <div class="card music-card fade-in">
+            <div class="quiz-header">
+                <span class="question-counter">Вопрос {{.Current}} из {{.Total}}</span>
+                <a href="/dashboard" class="logout-btn-small">🚪 Выйти</a>
+            </div>
+            
+            <div class="music-info">
+                <h2>{{.Question.Title}}</h2>
+                <p class="artist">{{.Question.Artist}}</p>
+            </div>
+            
+            <!-- Аудио плеер -->
+            <div class="audio-player">
+                <audio id="musicPlayer" src="{{.Question.AudioURL}}" preload="auto"></audio>
+                <button id="playBtn" class="play-btn">
+                    <span class="play-icon">▶️</span> Прослушать
+                </button>
+                <div class="timer-container">
+                    <div class="timer-bar" id="timerBar"></div>
+                    <span class="timer-text" id="timerText">⏱️ 3с</span>
+                </div>
+            </div>
+            
+            <form action="/music-answer" method="POST" id="music-form">
+                <input type="hidden" name="qid" value="{{.Question.ID}}">
+                <div class="options-grid">
+                    {{range $i, $opt := .Question.Options}}
+                    <label class="option music-option">
+                        <input type="radio" name="choice" value="{{$i}}" required>
+                        <span>{{$opt}}</span>
+                    </label>
+                    {{end}}
+                </div>
+                <button type="submit" class="btn" id="submitBtn" disabled>Ответить →</button>
+            </form>
+        </div>
+    </div>
+    
+        <script>
+        const audio = document.getElementById('musicPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const timerBar = document.getElementById('timerBar');
+        const timerText = document.getElementById('timerText');
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('music-form');
+        const options = document.querySelectorAll('.music-option input');
+        
+        let timer = null;
+        let timeLeft = 3;
+        let isPlaying = false;
+        
+        function stopTimer() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+        
+        function resetTimer() {
+            stopTimer();
+            timeLeft = 3;
+            timerBar.style.width = '100%';
+            timerText.textContent = '⏱️ 3с';
+            timerBar.style.background = 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)';
+        }
+        
+        // Включаем кнопку при выборе варианта
+        options.forEach(opt => {
+            opt.addEventListener('change', () => {
+                submitBtn.disabled = false;
+            });
+        });
+        
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                // Останавливаем воспроизведение
+                audio.pause();
+                audio.currentTime = 0;
+                stopTimer();
+                resetTimer();
+                playBtn.innerHTML = '<span class="play-icon">▶️</span> Прослушать';
+                isPlaying = false;
+                return;
+            }
+            
+            // Начинаем воспроизведение
+            audio.currentTime = 0;
+            audio.play();
+            playBtn.innerHTML = '<span class="play-icon">⏹️</span> Остановить';
+            isPlaying = true;
+            
+            // Запускаем таймер на 3 секунды
+            timeLeft = 3;
+            timerBar.style.width = '100%';
+            timerText.textContent = '⏱️ 3с';
+            timerBar.style.background = 'linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%)';
+            
+            stopTimer();
+            timer = setInterval(() => {
+                timeLeft--;
+                const percent = (timeLeft / 3) * 100;
+                timerBar.style.width = percent + '%';
+                timerText.textContent = '⏱️ ' + timeLeft + 'с';
+                
+                if (timeLeft <= 1) {
+                    timerBar.style.background = 'linear-gradient(90deg, #ff6b6b 0%, #ff4757 100%)';
+                }
+                
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    timerBar.style.width = '0%';
+                    timerText.textContent = '⏰ Время вышло!';
+                    timerBar.style.background = '#ff6b6b';
+                    
+                    // Останавливаем музыку
+                    audio.pause();
+                    audio.currentTime = 0;
+                    playBtn.innerHTML = '<span class="play-icon">▶️</span> Прослушать';
+                    isPlaying = false;
+                }
+            }, 1000);
+            
+            // Когда аудио закончится
+            audio.onended = function() {
+                stopTimer();
+                playBtn.innerHTML = '<span class="play-icon">▶️</span> Прослушать';
+                isPlaying = false;
+                timerText.textContent = '✅ Прослушано!';
+                timerBar.style.background = '#4CAF50';
+                timerBar.style.width = '100%';
+                // Разрешаем отправку, если выбран вариант
+                let selected = false;
+                options.forEach(opt => {
+                    if (opt.checked) selected = true;
+                });
+                if (selected) {
+                    submitBtn.disabled = false;
+                }
+            };
+        });
+        
+        // Проверяем, можно ли отправить форму
+        form.addEventListener('submit', (e) => {
+            let selected = false;
+            options.forEach(opt => {
+                if (opt.checked) selected = true;
+            });
+            if (!selected) {
+                e.preventDefault();
+                alert('Пожалуйста, выбери вариант ответа!');
+                return;
+            }
+            
+            // Если музыка ещё играет, останавливаем
+            if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                stopTimer();
+                playBtn.innerHTML = '<span class="play-icon">▶️</span> Прослушать';
+                isPlaying = false;
+            }
+        });
+    </script>
+    
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

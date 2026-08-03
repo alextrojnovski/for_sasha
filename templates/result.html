@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результат</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+<div class="light-spots">
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+</div>
+    <div class="container">
+        <div class="card result-card">
+            <div class="result-icon">
+                {{if ge .Percent 80}}🎉{{else if ge .Percent 50}}😊{{else}}🤔{{end}}
+            </div>
+            <h1>Результат теста</h1>
+            {{if .Name}}
+            <p class="user-name">Для: {{.Name}}</p>
+            {{end}}
+            <div class="score">
+                <span class="number">{{.Correct}}</span>
+                <span class="total">/ {{.Total}}</span>
+            </div>
+            <p class="percent">{{.Percent}}% правильных ответов</p>
+            <div class="message">
+                {{if ge .Percent 80}}
+                    Отлично! Ты знаешь Сашу очень хорошо! ❤️
+                {{else if ge .Percent 50}}
+                    Неплохо, но можно лучше! 😊
+                {{else}}
+                    Саше нужно рассказать о себе побольше 😄
+                {{end}}
+            </div>
+            <div class="result-actions">
+                <a href="/logout" class="btn btn-secondary">🔄 Пройти заново</a>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

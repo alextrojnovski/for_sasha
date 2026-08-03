@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧾 Ваш купон</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .receipt-container {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .receipt-card {
+            background: rgba(255, 248, 240, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px 35px;
+            box-shadow: 
+                0 20px 60px rgba(150, 100, 80, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(212, 136, 122, 0.15);
+            outline: 3px solid rgba(212, 136, 122, 0.03);
+            outline-offset: 3px;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 15px 15px, rgba(212, 136, 122, 0.04) 2px, transparent 2px),
+                radial-gradient(circle at 45px 45px, rgba(212, 136, 122, 0.03) 3px, transparent 3px);
+            background-size: 60px 60px;
+        }
+
+        .receipt-card::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1.5px dashed rgba(212, 136, 122, 0.08);
+            border-radius: 18px;
+            pointer-events: none;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed rgba(212, 136, 122, 0.15);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .receipt-header .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .receipt-header h1 {
+            font-size: 24px;
+            color: #3d2a1e;
+            margin: 0;
+        }
+
+        .receipt-header .subtitle {
+            color: #b0a090;
+            font-size: 13px;
+            margin: 5px 0 0 0;
+        }
+
+        .receipt-body {
+            padding: 5px 0;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(200, 180, 170, 0.15);
+        }
+
+        .receipt-row:last-child {
+            border-bottom: none;
+        }
+
+        .receipt-row .label {
+            color: #8a7a6a;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .receipt-row .value {
+            color: #3d2a1e;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .receipt-divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #d4887a;
+            opacity: 0.2;
+            font-size: 12px;
+            letter-spacing: 4px;
+            font-family: 'Georgia', serif;
+        }
+
+        .receipt-barcode {
+            text-align: center;
+            padding: 15px 0;
+            margin: 10px 0 15px 0;
+            background: rgba(255, 248, 240, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(200, 180, 170, 0.1);
+        }
+
+        .receipt-barcode .barcode-svg {
+            max-width: 280px;
+            height: auto;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed rgba(212, 136, 122, 0.15);
+        }
+
+        .receipt-footer .signature {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            color: #d4887a;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .receipt-footer .signature-line {
+            display: inline-block;
+            border-bottom: 2px solid #d4887a;
+            padding: 0 20px 5px 20px;
+            font-size: 16px;
+            color: #3d2a1e;
+        }
+
+        .receipt-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .receipt-actions .btn {
+            padding: 12px 25px;
+            font-size: 14px;
+            width: auto;
+            min-width: 140px;
+            border-radius: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+
+        .receipt-actions .btn-print {
+            background: rgba(255, 248, 240, 0.6);
+            color: #3d2a1e;
+            border: 2px solid rgba(212, 136, 122, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .receipt-actions .btn-print:hover {
+            background: rgba(255, 248, 240, 0.85);
+            transform: translateY(-2px);
+            border-color: rgba(212, 136, 122, 0.3);
+            box-shadow: 0 8px 30px rgba(150, 100, 80, 0.15);
+        }
+
+        .receipt-actions .btn-home {
+            background: rgba(255, 248, 240, 0.6);
+            color: #3d2a1e;
+            border: 2px solid rgba(212, 136, 122, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .receipt-actions .btn-home:hover {
+            background: rgba(255, 248, 240, 0.85);
+            transform: translateY(-2px);
+            border-color: rgba(212, 136, 122, 0.3);
+            box-shadow: 0 8px 30px rgba(150, 100, 80, 0.15);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #b0a090;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #d4887a;
+        }
+
+        .receipt-id {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #c0b0a0;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 480px) {
+            .receipt-card {
+                padding: 25px 18px;
+            }
+            .receipt-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .receipt-row .value {
+                text-align: left;
+                width: 100%;
+            }
+            .receipt-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .receipt-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="light-spots">
+        <div class="light-spot"></div>
+        <div class="light-spot"></div>
+        <div class="light-spot"></div>
+    </div>
+
+    <div class="container receipt-container">
+        <div class="receipt-card">
+            <div class="receipt-header">
+                <span class="icon">💝</span>
+                <h1>Эксклюзивный купон</h1>
+                <p class="subtitle">Для {{.Coupon.UserName}} ❤️</p>
+                <p class="subtitle">Не забудь предъявить его Саше</p>
+            </div>
+
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span class="label">📅 Дата</span>
+                    <span class="value">{{.Coupon.Date}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">🕐 Время</span>
+                    <span class="value">{{.Coupon.Time}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">📍 Место</span>
+                    <span class="value">{{.Coupon.Place}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">👤 Имя</span>
+                    <span class="value">{{.Coupon.UserName}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">📅 Создан</span>
+                    <span class="value">{{.Coupon.CreatedAt}}</span>
+                </div>
+            </div>
+
+            <div class="receipt-divider">✿ ✿ ✿ ✿ ✿</div>
+
+            <div class="receipt-barcode">
+                <svg class="barcode-svg" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="2" height="40" x="0" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="4" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="9" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="12" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="18" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="22" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="25" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="30" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="34" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="40" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="43" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="47" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="52" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="55" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="61" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="65" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="70" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="73" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="77" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="83" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="86" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="91" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="95" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="98" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="104" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="108" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="113" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="116" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="120" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="126" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="131" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="134" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="138" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="144" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="147" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="152" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="156" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="159" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="165" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="169" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="174" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="177" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="181" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="187" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="190" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="195" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="199" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="205" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="208" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="212" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="217" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="220" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="226" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="230" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="235" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="238" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="242" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="248" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="251" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="256" y="10" fill="#3d2a1e"/>
+                    <rect width="4" height="40" x="260" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="266" y="10" fill="#3d2a1e"/>
+                    <rect width="2" height="40" x="269" y="10" fill="#3d2a1e"/>
+                    <rect width="3" height="40" x="273" y="10" fill="#3d2a1e"/>
+                    <rect width="1" height="40" x="278" y="10" fill="#3d2a1e"/>
+                </svg>
+            </div>
+
+            <div class="receipt-footer">
+                <div class="signature">✨ До встречи ✨</div>
+                <div class="signature-line">__________________</div>
+                <p style="font-size:12px; color:#b0a090; margin:5px 0 0 0;">
+                    Действителен при предъявлении
+                </p>
+                <div class="receipt-id">#{{.Coupon.CreatedAt | printf "%s"}}</div>
+            </div>
+        </div>
+
+        <div class="receipt-actions">
+            <button onclick="window.print()" class="btn btn-print">
+                🖨️ Распечатать чек
+            </button>
+            <a href="/dashboard" class="btn btn-home">
+                🏠 На главную
+            </a>
+        </div>
+        
+        <a href="/coupon-form" class="back-link">← Заполнить заново</a>
+    </div>
+
+    <script src="/static/js/cursor.js"></script>
+</body>
+</html>

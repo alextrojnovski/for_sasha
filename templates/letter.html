@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Письмо для Саши</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        .envelope-wrapper {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .envelope-container {
+            perspective: 1000px;
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .envelope {
+            width: 100%;
+            aspect-ratio: 380/280;
+            position: relative;
+            background: #faf0e6;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(180, 150, 130, 0.25);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 80px rgba(180, 150, 130, 0.35);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #f5e6d3;
+            clip-path: polygon(0 0, 50% 70%, 100% 0);
+            border-bottom: 2px solid #e8d5c0;
+            z-index: 3;
+            transition: all 0.8s ease;
+            transform-origin: top;
+        }
+
+        .envelope-flap.open {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: #faf0e6;
+            border-radius: 0 0 12px 12px;
+            border: 2px solid #e8d5c0;
+            border-top: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1;
+        }
+
+        .envelope-body .letter-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .envelope-body h2 {
+            color: #a0826a;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .envelope-body p {
+            color: #c4a88a;
+            font-size: 12px;
+            margin: 4px 0 0 0;
+            font-style: italic;
+        }
+
+        .letter-note {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 75%;
+            height: 55%;
+            background: #fef9f0;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #f0e6d8;
+            transition: all 0.3s ease;
+        }
+
+        .letter-note.hide {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.8);
+        }
+
+        .letter-note .note-content {
+            font-size: 14px;
+            color: #8b7355;
+            line-height: 1.6;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+        }
+
+        .letter-note .note-content .heart-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .click-hint {
+            text-align: center;
+            margin-top: 20px;
+            color: #b8a090;
+            font-size: 15px;
+            animation: fadeInOut 2s ease-in-out infinite;
+            font-family: 'Georgia', serif;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .click-hint .arrow {
+            display: inline-block;
+            animation: bounce-arrow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce-arrow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        @media (max-width: 480px) {
+            .envelope-container {
+                max-width: 320px;
+            }
+            
+            .envelope-body .letter-icon {
+                font-size: 36px;
+            }
+            
+            .envelope-body h2 {
+                font-size: 14px;
+            }
+            
+            .letter-note .note-content {
+                font-size: 12px;
+            }
+            
+            .envelope-body p {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .envelope-container {
+                max-width: 280px;
+            }
+            
+            .envelope-body .letter-icon {
+                font-size: 30px;
+            }
+            
+            .envelope-body h2 {
+                font-size: 12px;
+            }
+            
+            .letter-note .note-content {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Тёплые световые пятна -->
+<div class="light-spots">
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+    <div class="light-spot"></div>
+</div>
+
+<div class="envelope-wrapper">
+    <div class="envelope-container" onclick="openLetter()">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap" id="flap"></div>
+            <div class="letter-note" id="note">
+                <div class="note-content">
+                    <span class="heart-icon">💕</span>
+                    Не бейте старался как мог...
+                </div>
+            </div>
+            <div class="envelope-body">
+                <div class="letter-icon">✉️</div>
+                <h2>💌 Открой меня</h2>
+                <p>Нажми на конверт</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="click-hint">
+        <span class="arrow">👆</span> Нажми, чтобы открыть
+    </div>
+</div>
+
+<script>
+    let isOpening = false;
+    
+    function openLetter() {
+        if (isOpening) return;
+        isOpening = true;
+        
+        const flap = document.getElementById('flap');
+        const note = document.getElementById('note');
+        
+        // Открываем клапан
+        flap.classList.add('open');
+        
+        // Прячем записку
+        note.classList.add('hide');
+        
+        // Ждём завершения анимации и переходим
+        setTimeout(function() {
+            window.location.href = '/open-letter';
+        }, 800);
+    }
+</script>
+
+<script src="/static/js/cursor.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+for_sasha
+app
+*.test
+*.out
+
+# Dependency directories
+vendor/
+node_modules/
+
+# Go workspace
+go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# Temporary files
+tmp/
+*.tmp
+
+# Railway
+railway.json
+.railway/
